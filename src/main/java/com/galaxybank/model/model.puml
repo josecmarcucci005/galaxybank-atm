@@ -1,0 +1,158 @@
+@startuml
+title __GalaxyBank Model's Class Diagram__\n
+
+  namespace com.galaxybank.model {
+    class com.galaxybank.model.ATM {
+        ~ id : long
+        ~ bank : bank
+        ~ location : String
+        ~ transactions : List<Transaction>
+        + getId()
+        + getBank()
+        + getLocation()
+        + getTransactions()
+        + setId()
+        + setBank()
+        + setLocation()
+        + setTransactions()
+    }
+  }
+
+
+  namespace com.galaxybank.model {
+    class com.galaxybank.model.Account {
+        ~ accountType : AccountType
+        ~ balance : double
+        ~ cards : List<Card>
+        ~ id : long
+        ~ customer : Customer
+        + getAccountType()
+        + getBalance()
+        + getCards()
+        + getId()
+        + getCustomer()
+        + setAccountType()
+        + setBalance()
+        + setId()
+        + setCards()
+        + setCustomer()
+    }
+  }
+
+
+  namespace com.galaxybank.model {
+    enum AccountType {
+      CURRENT
+      SAVING
+    }
+  }
+
+
+  namespace com.galaxybank.model {
+    class com.galaxybank.model.Bank {
+        ~ address : String
+        ~ atmList : List<ATM>
+        ~ id : long
+        ~ name : String
+        ~ swiftCode : String
+        ~ customers : List<Customer>
+        + getAddress()
+        + getAtmList()
+        + getId()
+        + getName()
+        + getSwiftCode()
+        + getCustomers()
+        + setAddress()
+        + setId()
+        + setName()
+        + setSwiftCode()
+        + setAtmList()
+        + setCustomers()
+    }
+  }
+
+
+  namespace com.galaxybank.model {
+    class com.galaxybank.model.Card {
+        ~ id : long
+        ~ expiringDate : Date
+        ~ securityCd : String
+        ~ account : Account
+        ~ transactions : List<Transaction>
+        + getId()
+        + getExpiringDate()
+        + getSecurityCd()
+        + getAccount()
+        + getTransactions()
+        + setId()
+        + setExpiringDate()
+        + setSecurityCd()
+        + setAccount()
+        + setTransactions()
+    }
+  }
+
+
+  namespace com.galaxybank.model {
+    class com.galaxybank.model.Customer {
+        ~ accounts : List<Account>
+        ~ address : String
+        ~ id : long
+        ~ name : String
+        ~ phone : String
+        + getAccounts()
+        + getAddress()
+        + getId()
+        + getName()
+        + getPhone()
+        + setAccounts()
+        + setAddress()
+        + setId()
+        + setName()
+        + setPhone()
+    }
+  }
+
+
+  namespace com.galaxybank.model {
+    class com.galaxybank.model.Transaction {
+        ~ atm : ATM
+        ~ card : Card
+        ~ transactionDate : Date
+        ~ transactionId : long
+        ~ transactionType : TransactionType
+        + getAtm()
+        + getCard()
+        + getTransactionDate()
+        + getTransactionId()
+        + getTransactionType()
+        + setAtm()
+        + setCard()
+        + setTransactionDate()
+        + setTransactionId()
+        + setTransactionType()
+    }
+  }
+
+
+  namespace com.galaxybank.model {
+    enum TransactionType {
+      CHECK_BALANCE
+      DEPOSIT
+      PIN_VALIDATION
+      TRANSFER
+      WITHDRAWN
+    }
+  }
+
+   namespace com.galaxybank.model {
+     Bank "1" *-- "*" ATM
+     Bank "1" *-- "*" Customer
+     Customer "1" *-- "*" Account
+     Account "1" *-- "*" Card
+     Card "1" *-- "*" Transaction
+     ATM "1" *-- "*" Transaction
+     AccountType <|-- Account
+     TransactionType <|-- Transaction
+   }
+@enduml
