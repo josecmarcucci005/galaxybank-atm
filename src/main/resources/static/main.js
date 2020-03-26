@@ -149,8 +149,9 @@ new Vue({
           pin: this.pin
         }
 
-        var url = 'http://localhost:9081/galaxybank/validateCard'
+        //var url = 'http://localhost:9081/galaxybank/validateCard'
         //var url = 'https://galaxybank-atm.herokuapp.com/galaxybank/validateCard'
+        var url = '/galaxybank/validateCard'
 
         this.makeAxiosCall(url, params, this.checkConditionsForPin)
       },
@@ -167,7 +168,8 @@ new Vue({
           }
 
           //var url = 'https://galaxybank-atm.herokuapp.com/galaxybank/saveTransaction'
-          var url = 'http://localhost:9081/galaxybank/saveTransaction'
+          //var url = 'http://localhost:9081/galaxybank/saveTransaction'
+          var url = '/galaxybank/saveTransaction'
 
           var temp = this
 
@@ -187,7 +189,8 @@ new Vue({
           }
 
         //var url = 'https://galaxybank-atm.herokuapp.com/galaxybank/saveTransaction'
-        var url = 'http://localhost:9081/galaxybank/saveTransaction'
+        //var url = 'http://localhost:9081/galaxybank/saveTransaction'
+        var url = '/galaxybank/saveTransaction'
 
         var temp = this
         this.makeAxiosCall(url, params, function() {
