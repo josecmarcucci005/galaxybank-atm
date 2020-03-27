@@ -27,6 +27,8 @@ public class ATM {
     @JsonManagedReference
     List<Transaction> transactions = new ArrayList<>();
 
+    double balance;
+
     public long getId() {
         return id;
     }
@@ -57,6 +59,14 @@ public class ATM {
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     @Override
