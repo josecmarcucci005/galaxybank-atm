@@ -19,7 +19,8 @@ new Vue({
         errorMsg: null,
 
         customer: null,
-        account: null
+        account: null,
+        atm: null
 
     },
 
@@ -71,6 +72,9 @@ new Vue({
           this.pinLabelShow = false
           this.card = ''
           this.pin = ''
+          this.amount = ''
+          this.customer = null
+          this.atm = null
       },
       showMenuPanel: function () {
           this.menuPanelShow = true
@@ -107,10 +111,6 @@ new Vue({
           this.welcomePanelShow = true
           this.displayPanelShow = false
           this.cancelSelectedFieldInput()
-          this.card = ''
-          this.pin = ''
-          this.amount = ''
-          this.customer = null
       },
 
       showAlert: function (type, errorMsg) {
@@ -157,7 +157,9 @@ new Vue({
       },
 
       validateWithdraw : function () {
-        if (this.account.balance < this.amount) {
+        if (this.atm.data.balance < this.amount) {
+          this.showAlert('warning','This ATM does not have enough available money to complete the withdrawal operation! Please try smaller amount or contact your bank.')
+        } else if (this.account.balance < this.amount) {
           this.showAlert('warning','Insuficient funds in your account! Please try a different amount as your account balance is: ' + this.account.balance)
         } else {
           var params = {
@@ -177,6 +179,8 @@ new Vue({
             temp.displayPanelShow = true
             temp.operationPanelShow = false
           })
+
+          this.addAmountToATMBalance((this.amount*-1))
         }
       },
 
@@ -197,6 +201,8 @@ new Vue({
           temp.displayPanelShow = true
           temp.operationPanelShow = false
         })
+
+        this.addAmountToATMBalance(this.amount)
       },
 
       makeAxiosCall : function (url, params, func) {
@@ -237,12 +243,69 @@ new Vue({
         var temp = this
         if (temp.customer != null && temp.customer.result == 'OK') {
             temp.showMenuPanel()
+            temp.getATMInformation()
         } else if (temp.customer != null && this.customer.result == 'ERROR') {
             temp.showAlert('warning', temp.customer.errMsg)
         } else {
             temp.showAlert('warning','The service is not availabe. Please try again later or contact your bank.');
         }
-      }
+      },
+
+      getATMInformation: function() {
+         var params = {
+             atmId: 1
+          }
+
+          var url = '/galaxybank/getAtmInfo'
+
+          this.makeGenAxiosCall(url, params, function(temp, response) {
+            if (response.data.result == 'ERROR') {
+              temp.showAlert('warning','There was an error with retrieving the ATMs Information! ErrorMsg:' + response.data.errMsg)
+            } else {
+              temp.atm = response.data
+            }
+          })
+      },
+
+      makeGenAxiosCall : function (url, params, func) {
+        var temp = this;
+
+        try {
+            axios.get(url, {
+                params: params,
+                responseType: 'json',
+                timeout: 30000
+              })
+              .then(function (response) {
+                  func(temp,response)
+
+              })
+              .catch(function (error) {
+                console.log(error);
+              })
+           } catch (error) {
+              console.log(error)
+           }
+      },
+
+      addAmountToATMBalance: function(amnt) {
+            var amnt = parseFloat(this.atm.data.balance) + parseFloat(amnt)
+            var params = {
+              atmId: 1,
+              balance: amnt
+            }
+
+          var url = '/galaxybank/updateAtmBalance'
+
+          this.makeGenAxiosCall(url, params, function(temp, response) {
+            if (response.data.result == 'ERROR') {
+              console.log('There was an error with updating the ATM money balance! ErrorMsg:' + response.data.errMsg)
+            } else {
+              temp.atm = response.data
+            }
+          })
+
+      },
 
     }
 

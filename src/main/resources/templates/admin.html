@@ -16,13 +16,13 @@
             <div class="four wide  column"></div>
             <div class="eight wide column">
                 <div class="ui blue inverted center">
-                    <h1 class="ui inverted center aligned header">GALAXYBANK ATM</h1>
+                    <h1 class="ui inverted center aligned header">GALAXYBANK ATM - ADMIN</h1>
                 </div>
             </div>
-            <div class="ui blue inverted right" v-if="customer != null">
+            <div class="ui blue inverted right" v-if="user != null">
                 <Content>
                     Welcome to <b>GalaxyBank!</b>
-                    <p style="font-size:20px;">{{customer.data.name}}</p>
+                    <p style="font-size:20px;">{{user.data.name }} {{user.data.surname}}</p>
                 </Content>
             </div>
         </div>
@@ -49,55 +49,21 @@
                     <div class="ui eight column stackable center aligned page grid">
                         <div class="ui form">
                             <div class="fields">
-                                <div v-if="cardLabelShow" class="field">
-                                    <label style="font-size:18px;" >Welcome! <br/>Enter your card number</label>
-                                    <input style="width: 300px; height: 60px; font-size:25px; text-align:right;" type="text" v-model="card" readonly="">
-                                    </input>
-                                </div>
-                                <div v-if="pinLabelShow" class="field">
-                                    <label style="font-size:18px;" >Enter your pin number</label>
-                                    <input style="width: 300px; height: 60px; font-size:25px; text-align:right;" type="password" v-model="pin" readonly="">
-                                    </input>
+                                <div class="ui stacked secondary  segment">
+                                    <div class="field">
+                                        <label style="font-size:18px;width: 300px;" >Log-in to your account</label>
+                                        <div class="ui left icon input">
+                                            <i class="user icon"></i>
+                                            <input type="text" v-model="email" placeholder="E-mail address"/>
+                                        </div>
+                                        <div class="ui left icon input">
+                                            <i class="lock icon"></i>
+                                            <input type="password" v-model="password" placeholder="Password"/>
+                                        </div>
+                                        <button class="ui fluid large teal submit button" v-on:click="validateUser()">Login</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="ui row">
-                    <div class="four wide column"></div>
-                    <div class="seven wide column">
-                        <div class="ui medium buttons">
-                            <button class="ui attached button" v-on:click="changeSelectedFieldInput('1')">1</button>
-                            <button class="ui attached button" v-on:click="changeSelectedFieldInput('2')">2</button>
-                            <button class="ui attached button" v-on:click="changeSelectedFieldInput('3')">3</button>
-                            <button class="ui attached button" v-on:click="changeSelectedFieldInput('4')">4</button>
-                        </div>
-                        <div class="ui medium buttons">
-                            <button class="ui attached button" v-on:click="changeSelectedFieldInput('5')">5</button>
-                            <button class="ui attached button" v-on:click="changeSelectedFieldInput('6')">6</button>
-                            <button class="ui attached button" v-on:click="changeSelectedFieldInput('7')">7</button>
-                            <button class="ui attached button" v-on:click="changeSelectedFieldInput('8')">8</button>
-                        </div>
-                        <div class="ui medium  buttons">
-                            <button class="ui attached button" v-on:click="changeSelectedFieldInput('9')">9</button>
-                            <button class="ui attached button" v-on:click="changeSelectedFieldInput('0')">0</button>
-                        </div>
-                    </div>
-
-                    <div class="five wide column">
-                        <div class="ui vertical labeled icon buttons">
-                            <button class="ui yellow button" v-on:click="resetSelectedFieldInput()">
-                                <i class="icon minus"></i>
-                                RESET
-                            </button>
-                            <button class="ui green button" v-on:click="validateSelectedFieldInput()">
-                                <i class="icon check"></i>
-                                OK
-                            </button>
-                            <button v-if="pinLabelShow" class="ui red button" v-on:click="cancelSelectedFieldInput()">
-                                <i class="icon close"></i>
-                                CANCEL
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -108,15 +74,12 @@
                     <div class="eight wide column center aligned">
                         <label style="font-size:20px;" >Choose an operation from the below menu</label>
                         <br/><br/>
-                        <button class="ui medium primary button" v-on:click="showWithdrawPanel()">
-                            Withdraw <br/>   Money
-                        </button>
                         <button class="ui medium primary button" v-on:click="showDepositPanel()">
                             Deposit <br/>   Money
                         </button>
                         <br/><br/>
                         <button class="ui medium primary button" v-on:click="showBalancePanel()">
-                            Account <br/>   Balance
+                            ATM <br/>   Balance
                         </button>
                     </div>
                 </div>
@@ -128,9 +91,9 @@
                         <div class="ui form">
                             <div class="fields">
                                 <div class="field">
-                                    <label style="font-size:18px;">Enter the ammount to {{operationType}}</label><br/>
-                                    <input style="width: 300px; height: 60px; font-size:25px; text-align:right;" type="text" v-model="amount" readonly="">
-                                    </input>
+                                    <label style="font-size:18px;">Enter the ammount to Deposit</label><br/>
+                                    <input style="width: 300px; height: 60px; font-size:25px; text-align:right;" type="text" v-model="amount" readonly=""/>
+
                                 </div>
                             </div>
                         </div>
@@ -167,13 +130,9 @@
                                 <i class="icon minus"></i>
                                 RESET
                             </button>
-                            <button class="ui green button" v-on:click="validateSelectedFieldInput()">
+                            <button class="ui green button" v-on:click="addAmountToATMBalance()">
                                 <i class="icon check"></i>
                                 OK
-                            </button>
-                            <button v-if="pinLabelShow" class="ui red button" v-on:click="cancelSelectedFieldInput()">
-                                <i class="icon close"></i>
-                                CANCEL
                             </button>
                         </div>
                     </div>
@@ -184,9 +143,9 @@
                     <div class="three wide column"></div>
                     <div class="eight wide column center aligned">
                         <div class="ui green message" v-if="!showAccountBalance">
-                            <label style="font-size:20px;">{{operationType}} operation was completed successfully!</label>
+                            <label style="font-size:20px;">The operation was completed successfully!</label>
                         </div>
-                        <label style="font-size:20px;">Your account balance is: {{account.balance}}</label>
+                        <label style="font-size:20px;">The AMT balance is: {{atm.data.balance}}</label>
                         <br/><br/>
                         <button class="ui medium primary button" v-on:click="showMenuPanel()">
                             Back To Menu
@@ -195,14 +154,13 @@
                 </div>
             </div>
         </div>
-        <div class="two wide column">
-            <!--label style="font-size:18px;">{{info.data }}</label-->
-        </div>
+        <div class="two wide column"></div>
 
     </div>
     <br/>
     <div class="ui blue  bottom attached button" tabindex="0">GalaxyBank Copyright © 2020 All right reserved</div>
 </div>
+
 <!-- partial -->
 <script src='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.0.7/semantic.min.js'></script>
 <script src='https://cdn.quilljs.com/0.16.0/quill.min.js'></script>
