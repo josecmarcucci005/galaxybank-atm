@@ -39,7 +39,7 @@ new Vue({
             pwd: this.password
           }
 
-          var url = '/galaxybank/loginAdmin'
+          var url = 'https://atm-galaxybank.herokuapp.com/galaxybank/loginAdmin'
 
           this.makeAxiosCall(url, params, function(temp, response) {
             if (response.data.result == 'ERROR') {
@@ -65,7 +65,7 @@ new Vue({
               balance: amnt
             }
 
-          var url = '/galaxybank/updateAtmBalance'
+          var url = 'https://atm-galaxybank.herokuapp.com/galaxybank/updateAtmBalance'
 
           this.makeAxiosCall(url, params, function(temp, response) {
             if (response.data.result == 'ERROR') {
@@ -84,7 +84,7 @@ new Vue({
              atmId: 1
           }
 
-          var url = '/galaxybank/getAtmInfo'
+          var url = 'https://atm-galaxybank.herokuapp.com/galaxybank/getAtmInfo'
 
           this.makeAxiosCall(url, params, function(temp, response) {
             console.log("ATM info retrieving")
@@ -97,14 +97,12 @@ new Vue({
       },
 
       cancelSelectedFieldInput: function () {
-          this.cardLabelShow = true
-          this.pinLabelShow = false
           this.atm = null
           this.user = null
           this.email = ''
           this.password = ''
           this.amount = ''
-          this.operationSucess = false
+          this.showAccountBalance = false
       },
       showMenuPanel: function () {
           this.menuPanelShow = true
@@ -112,8 +110,6 @@ new Vue({
           this.operationPanelShow = false
           this.displayPanelShow = false
           this.showAccountBalance = false
-          this.operationSucess = false
-          this.amount = ''
       },
       showWithdrawPanel: function () {
           this.menuPanelShow = false
@@ -133,6 +129,7 @@ new Vue({
           this.menuPanelShow = false
           this.operationPanelShow = false
           this.welcomePanelShow = true
+          this.displayPanelShow = false
           this.cancelSelectedFieldInput()
       },
 
