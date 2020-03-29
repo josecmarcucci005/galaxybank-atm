@@ -5,13 +5,16 @@ title __MODEL's Class Diagram__\n
   namespace com.galaxybank {
     namespace model {
       class com.galaxybank.model.ATM {
+          ~ balance : double
           ~ id : long
           ~ location : String
           ~ transactions : List<Transaction>
+          + getBalance()
           + getBank()
           + getId()
           + getLocation()
           + getTransactions()
+          + setBalance()
           + setBank()
           + setId()
           + setLocation()
@@ -49,6 +52,33 @@ title __MODEL's Class Diagram__\n
       enum AccountType {
         CURRENT
         SAVING
+      }
+    }
+  }
+  
+
+  namespace com.galaxybank {
+    namespace model {
+      class com.galaxybank.model.AdminUser {
+          ~ id : long
+          - email : String
+          - name : String
+          - password : String
+          - surname : String
+          - username : String
+          + getEmail()
+          + getId()
+          + getName()
+          + getPassword()
+          + getSurname()
+          + getUsername()
+          + setEmail()
+          + setId()
+          + setName()
+          + setPassword()
+          + setSurname()
+          + setUsername()
+          + toString()
       }
     }
   }

@@ -139,11 +139,29 @@ title __GalaxyBank Model's Class Diagram__\n
     enum TransactionType {
       CHECK_BALANCE
       DEPOSIT
-      PIN_VALIDATION
-      TRANSFER
       WITHDRAWN
     }
   }
+
+  namespace com.galaxybank.model {
+      class AdminUser {
+        ~ name : String
+        ~ surname : String
+        ~ username : String
+        ~ email : String
+        ~ password : String
+        + getName()
+        + getSurname()
+        + getUsername()
+        + getEmail()
+        + getPassword()
+        + setName()
+        + setSurname()
+        + setUsername()
+        + setEmail()
+        + setPassword()
+      }
+    }
 
    namespace com.galaxybank.model {
      Bank "1" *-- "*" ATM
