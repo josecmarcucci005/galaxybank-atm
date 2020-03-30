@@ -34,24 +34,6 @@ public class CustomerService {
         return null;
     }
 
-    public Account findAccountByCardId(long cardId) {
-        Card card = findCardById(cardId);
-
-        if (card != null) {
-            return card.getAccount();
-        }
-        return null;
-    }
-
-    public List<Transaction> findTransactionsByCardId(long cardId) {
-        Card card = findCardById(cardId);
-
-        if (card != null) {
-            return card.getTransactions();
-        }
-        return null;
-    }
-
     public ATM findATMById(long atmId) {
         return atmRepository.findOne(atmId);
     }
